@@ -1,24 +1,27 @@
 # Auto Frontlight for current KOReader
 
-A standalone port of KOReader's former **Auto frontlight** plugin for Kindle
-devices with an ambient-light sensor, including the Kindle Voyage. It replaces
-the removed BackgroundRunner dependency with KOReader's current `UIManager`
+A standalone replacement for KOReader's former **Auto frontlight** plugin for
+Kindle devices with an ambient-light sensor, including the Kindle Voyage. It
+uses the Voyage's full raw sensor reading and KOReader's current `UIManager`
 timer API.
 
 ## What it does
 
-KOReader converts the Voyage sensor reading into levels 0–4:
+The plugin reads the raw `alsLux` value and converts it to frontlight brightness
+with a smooth logarithmic curve. The recommended curve uses brightness 12 in
+complete darkness and gradually falls to 0 at a raw light reading of 10,000.
+This produces many more usable steps than KOReader's standard five sensor
+buckets.
 
-- 0 (darkest): brightness 10
-- 1 (dim): brightness 7
-- 2 (indoor light): brightness 4
-- 3 (bright): brightness 2
-- 4 (very bright): brightness 0/off
+Under **Adaptive brightness curve** you can change:
 
-These recommended values can all be changed under **Brightness by ambient
-level**. Setting any level to 0 turns the frontlight off. If you change the
-frontlight manually, that choice is preserved until the sensor moves into a
-different ambient-light level.
+- brightness in complete darkness;
+- brightness in daylight (0 turns the light off); and
+- the raw reading considered bright daylight.
+
+If you change the frontlight manually, that choice is preserved until the
+calculated automatic brightness changes. If direct raw-sensor access fails, the
+plugin automatically falls back to the older five-level method.
 
 ## Install on Kindle
 
