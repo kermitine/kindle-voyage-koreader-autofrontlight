@@ -35,6 +35,10 @@ plugin automatically falls back to the older five-level method.
 The default check interval is 60 seconds. A shorter interval responds faster
 but wakes the scheduler more frequently.
 
+When the Kindle resumes from sleep, the plugin adjusts the frontlight
+immediately and checks again one second later in case the ambient-light sensor
+needed a moment to refresh. It then returns to the selected check interval.
+
 ## Important
 
 In **Auto night mode**, leave **Frontlight off during day** disabled. That solar

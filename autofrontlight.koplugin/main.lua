@@ -235,7 +235,13 @@ end
 function AutoFrontlight:onResume()
     if self.enabled then
         -- Force a fresh decision because the ambient light may have changed
-        -- while the Kindle was asleep.
+        -- while the Kindle was asleep. Apply once immediately so the user
+        -- does not have to wait for the polling interval, then recheck after
+        -- one second in case powerd's sensor value was still settling during
+        -- the resume event.
+        self:_unschedule()
+        self.last_target_brightness = nil
+        self:_poll()
         self.last_target_brightness = nil
         self:_schedule(1)
     end
