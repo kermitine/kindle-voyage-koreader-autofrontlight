@@ -24,6 +24,10 @@ local DEFAULT_BRIGHTNESS_LEVELS = { 10, 7, 4, 2, 0 }
 local DEFAULT_DARKNESS_BRIGHTNESS = 12
 local DEFAULT_DAYLIGHT_BRIGHTNESS = 0
 local DEFAULT_BRIGHT_LIGHT_READING = 10000
+-- The Voyage ALS commonly jitters between 0 and a few lux in an otherwise
+-- pitch-black room. Treat that whole noise floor as complete darkness so it
+-- cannot cause visible frontlight changes.
+local DARKNESS_READING_CUTOFF = 5
 
 local AutoFrontlight = WidgetContainer:extend {
     name = "autofrontlight",
@@ -125,6 +129,10 @@ function AutoFrontlight:_readAmbientLevel()
 end
 
 function AutoFrontlight:_calculateTargetBrightness(raw_light)
+    if raw_light <= DARKNESS_READING_CUTOFF then
+        return self.darkness_brightness
+    end
+
     if raw_light >= self.bright_light_reading then
         return self.daylight_brightness
     end

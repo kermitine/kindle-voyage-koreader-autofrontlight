@@ -39,6 +39,11 @@ When the Kindle resumes from sleep, the plugin adjusts the frontlight
 immediately and checks again one second later in case the ambient-light sensor
 needed a moment to refresh. It then returns to the selected check interval.
 
+The Voyage sensor can fluctuate slightly near zero even when the room remains
+pitch black. Readings from 0 through 5 are therefore treated as complete
+darkness and always use the configured **Brightness in darkness** value. This
+prevents small sensor noise from making the frontlight pulse in a dark room.
+
 ## Important
 
 In **Auto night mode**, leave **Frontlight off during day** disabled. That solar
